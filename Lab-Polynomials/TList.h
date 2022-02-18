@@ -10,13 +10,18 @@ protected:
 public:
 	TList();
 	~TList();
-	bool IsEmpty() { return length == 0 };
+	bool IsEmpty() { return length == 0; }
 	void InsertFirst(T item);
 	void InsertCurrent(T item);
 	void InsertLast(T item);
 	void DeleteFirst();
 	void DeleteCurrent();
 
+	void GoNext();
+	void Reset();
+	bool IsEnd() { return pCurrent == pLast; }
+	T GetCurrentItem() { return pCurrent->value; }
+	void SetCurrentItem(T item) { pCurrent->value = item; }
 
 
 };
@@ -24,6 +29,7 @@ public:
 template<class T>
 inline TList<T>::TList()
 {
+	length = 0;
 	pStop = nullptr;
 	pFirst = pCurrent = pPrevious = pLast = pStop;
 }
@@ -31,12 +37,13 @@ inline TList<T>::TList()
 template<class T>
 inline TList<T>::~TList()
 {
-	while (length != 0) DeleteFirst();
+	while (!IsEmpty()) DeleteFirst();
 }
 
 template<class T>
 inline void TList<T>::InsertFirst(T item)
 {
+	if (IsEmpty()) pCurrent = pFirst;
 	TNode<T>* newNode = new TNode<T>();
 	newNode->value = item;
 	newNode->pNext = pFirst;
@@ -48,8 +55,8 @@ inline void TList<T>::InsertFirst(T item)
 template<class T>
 inline void TList<T>::InsertCurrent(T item)
 {
-	if (pCurrent == pFirst) {InsertFirst(); return;}
-	if (pCurrent == pLast) { InsertLast(); return; }
+	if (pCurrent == pFirst) {InsertFirst(item); return;}
+	if (pCurrent == pLast) { InsertLast(item); return; }
 	TNode<T>* newNode = new TNode<T>();
 	newNode->value = item;
 	newNode->pNext = pCurrent;
@@ -74,7 +81,7 @@ inline void TList<T>::DeleteFirst()
 	if (length == 0) throw "List is empty";
 	TNode<T>* pDeletable = pFirst;
 	pFirst = pFirst->pNext;
-	delete* pDeletable;
+	delete pDeletable;
 	length--;
 
 }
@@ -86,9 +93,28 @@ inline void TList<T>::DeleteCurrent()
 	TNode<T>* pDeletable = pCurrent;
 	pCurrent = pCurrent->pNext;
 	pPrevious->pNext = pCurrent;
-	delete* pDeletable;
+	delete pDeletable;
 	length--;
 }
+
+template<class T>
+inline void TList<T>::GoNext()
+{
+	if (IsEnd()) throw "Iterator is already at the end";
+	pPrevious = pCurrent;
+	pCurrent = pCurrent->pNext;
+}
+
+template<class T>
+inline void TList<T>::Reset()
+{
+	pPrevious = pStop;
+	if (!IsEmpty()) pCurrent = pFirst;
+	else pCurrent = pStop;
+}
+
+
+
 
 
 
