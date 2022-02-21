@@ -1,5 +1,7 @@
 #pragma once
 #include "TNode.h"
+#include <iostream>
+using namespace std;
 
 template<class T>
 class TList
@@ -8,8 +10,10 @@ protected:
 	TNode<T>* pFirst, * pCurrent, * pPrevious, * pLast, * pStop;
 	int length;
 public:
+
 	TList();
 	~TList();
+	int GetLength() { return length; }
 	bool IsEmpty() { return length == 0; }
 	void InsertFirst(T item);
 	void InsertCurrent(T item);
@@ -19,8 +23,10 @@ public:
 
 	void GoNext();
 	void Reset();
-	bool IsEnd() { return pCurrent == pLast; }
-	T GetCurrentItem() { return pCurrent->value; }
+	bool IsEnd() { return pCurrent == pStop; }
+	T GetCurrentItem() {
+		return pCurrent->value;
+	}
 	void SetCurrentItem(T item) { pCurrent->value = item; }
 
 
@@ -55,8 +61,8 @@ inline void TList<T>::InsertFirst(T item)
 template<class T>
 inline void TList<T>::InsertCurrent(T item)
 {
-	if (pCurrent == pFirst) {InsertFirst(item); return;}
-	if (pCurrent == pLast) { InsertLast(item); return; }
+	if (pCurrent == pFirst || IsEmpty()) {InsertFirst(item); return;}
+	//if (pCurrent == pLast) { InsertLast(item); return; }
 	TNode<T>* newNode = new TNode<T>();
 	newNode->value = item;
 	newNode->pNext = pCurrent;
@@ -90,6 +96,8 @@ template<class T>
 inline void TList<T>::DeleteCurrent()
 {
 	if (length == 0) throw "List is empty";
+	if (pCurrent == pFirst) {DeleteFirst(); return;}
+	if (pCurrent == pLast) pLast = pPrevious;
 	TNode<T>* pDeletable = pCurrent;
 	pCurrent = pCurrent->pNext;
 	pPrevious->pNext = pCurrent;
@@ -101,6 +109,7 @@ template<class T>
 inline void TList<T>::GoNext()
 {
 	if (IsEnd()) throw "Iterator is already at the end";
+	//cout << "\n(" << GetCurrentItem() << ", " << pLast->value << ") ";
 	pPrevious = pCurrent;
 	pCurrent = pCurrent->pNext;
 }
