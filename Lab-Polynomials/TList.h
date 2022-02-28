@@ -23,7 +23,10 @@ public:
 
 	void GoNext();
 	void Reset();
-	bool IsEnd() { return pCurrent == pStop; }
+	bool IsEnd() 
+	{ 
+		return pCurrent == pStop;
+	}
 	T GetCurrentItem() {
 		return pCurrent->value;
 	}
@@ -43,13 +46,18 @@ inline TList<T>::TList()
 template<class T>
 inline TList<T>::~TList()
 {
-	while (!IsEmpty()) DeleteFirst();
+	while (pFirst != pStop)
+	{
+		TNode<T>* tmp = pFirst;
+		pFirst = pFirst->pNext;
+		delete tmp;
+	}
 }
 
 template<class T>
 inline void TList<T>::InsertFirst(T item)
 {
-	if (IsEmpty()) pCurrent = pFirst;
+	//if (IsEmpty()) pCurrent = pFirst;
 	TNode<T>* newNode = new TNode<T>();
 	newNode->value = item;
 	newNode->pNext = pFirst;
@@ -76,7 +84,7 @@ inline void TList<T>::InsertLast(T item)
 	if (IsEmpty()) { InsertFirst(item); return; }
 	TNode<T>* newNode = new TNode<T>();
 	newNode->value = item;
-	newNode->pNext = nullptr;
+	newNode->pNext = pStop;
 	pLast->pNext = newNode;
 	length++;
 }
