@@ -14,7 +14,7 @@ public:
 	TList();
 	~TList();
 	int GetLength() { return length; }
-	bool IsEmpty() { return length == 0; }
+	bool IsEmpty();
 	void InsertFirst(T item);
 	void InsertCurrent(T item);
 	void InsertLast(T item);
@@ -23,28 +23,22 @@ public:
 
 	void GoNext();
 	void Reset();
-	bool IsEnd() 
-	{ 
-		return pCurrent == pStop;
-	}
-	T GetCurrentItem() {
-		return pCurrent->value;
-	}
+	bool IsEnd();
+	T GetCurrentItem();
 	void SetCurrentItem(T item) { pCurrent->value = item; }
 
 
 };
-
-template<class T>
-inline TList<T>::TList()
+template <class T>
+TList<T>::TList()
 {
-	length = 0;
 	pStop = nullptr;
-	pFirst = pCurrent = pPrevious = pLast = pStop;
+	pFirst = pLast = pPrevious = pCurrent = pStop;
+	length = 0;
 }
 
-template<class T>
-inline TList<T>::~TList()
+template <class T>
+TList<T>::~TList()
 {
 	while (pFirst != pStop)
 	{
@@ -54,82 +48,121 @@ inline TList<T>::~TList()
 	}
 }
 
-template<class T>
-inline void TList<T>::InsertFirst(T item)
+template <class T>
+bool TList<T>::IsEmpty()
 {
-	//if (IsEmpty()) pCurrent = pFirst;
+	return pFirst == pStop;
+}
+
+template <class T>
+void TList<T>::InsertFirst(T item)
+{
 	TNode<T>* newNode = new TNode<T>();
 	newNode->value = item;
 	newNode->pNext = pFirst;
 	pFirst = newNode;
-	if (IsEmpty()) pLast = pFirst;
 	length++;
+	if (length == 1)
+		pLast = pFirst;
 }
 
-template<class T>
-inline void TList<T>::InsertCurrent(T item)
+template <class T>
+void TList<T>::InsertLast(T item)
 {
-	if (pCurrent == pFirst || IsEmpty()) {InsertFirst(item); return;}
-	//if (pCurrent == pLast) { InsertLast(item); return; }
-	TNode<T>* newNode = new TNode<T>();
-	newNode->value = item;
-	newNode->pNext = pCurrent;
-	pPrevious->pNext = newNode;
-	length++;
+	if (length > 0)
+	{
+		TNode<T>* newNode = new TNode<T>();
+		newNode->value = item;
+		newNode->pNext = pStop;
+
+		pLast->pNext = newNode;
+		pLast = newNode;
+		length++;
+	}
+	else
+	{
+		InsertFirst(item);
+	}
 }
 
-template<class T>
-inline void TList<T>::InsertLast(T item)
+template <class T>
+void TList<T>::InsertCurrent(T item)
 {
-	if (IsEmpty()) { InsertFirst(item); return; }
-	TNode<T>* newNode = new TNode<T>();
-	newNode->value = item;
-	newNode->pNext = pStop;
-	pLast->pNext = newNode;
-	length++;
+	if (pCurrent == pFirst)
+		InsertFirst(item);
+	else if (pPrevious == pLast)
+		InsertLast(item);
+	else
+	{
+		TNode<T>* newNode = new TNode<T>();
+		newNode->value = item;
+
+		newNode->pNext = pCurrent;
+		pPrevious->pNext = newNode;
+		pCurrent = newNode;
+		length++;
+	}
 }
 
-template<class T>
-inline void TList<T>::DeleteFirst()
+template <class T>
+void TList<T>::DeleteFirst()
 {
-	if (length == 0) throw "List is empty";
-	TNode<T>* pDeletable = pFirst;
+	if (pFirst == pStop)
+		throw "Can't delete first element: it's a barrier";
+
+	TNode<T>* tmp = pFirst;
 	pFirst = pFirst->pNext;
-	delete pDeletable;
-	length--;
-
-}
-
-template<class T>
-inline void TList<T>::DeleteCurrent()
-{
-	if (length == 0) throw "List is empty";
-	if (pCurrent == pFirst) {DeleteFirst(); return;}
-	if (pCurrent == pLast) pLast = pPrevious;
-	TNode<T>* pDeletable = pCurrent;
-	pCurrent = pCurrent->pNext;
-	pPrevious->pNext = pCurrent;
-	delete pDeletable;
+	delete tmp;
 	length--;
 }
 
-template<class T>
-inline void TList<T>::GoNext()
+template <class T>
+void TList<T>::DeleteCurrent()
 {
-	if (IsEnd()) throw "Iterator is already at the end";
-	//cout << "\n(" << GetCurrentItem() << ", " << pLast->value << ") ";
+	if (pCurrent == pStop)
+		throw "Can't delete current element: it's a barrier";
+
+	if (pFirst == pCurrent)
+	{
+		DeleteFirst();
+	}
+	else
+	{
+		TNode<T>* tmp = pCurrent;
+		pCurrent = pCurrent->pNext;
+		pPrevious->pNext = pCurrent;
+		delete tmp;
+		length--;
+	}
+}
+
+template <class T>
+T TList<T>::GetCurrentItem()
+{
+	if (pCurrent == pStop)
+		throw "Can't get current element: it's a barrier";
+	return pCurrent->value;
+}
+
+template <class T>
+void TList<T>::Reset()
+{
+	pPrevious = pStop;
+	pCurrent = pFirst;
+}
+
+template <class T>
+void TList<T>::GoNext()
+{
 	pPrevious = pCurrent;
 	pCurrent = pCurrent->pNext;
 }
 
-template<class T>
-inline void TList<T>::Reset()
+template <class T>
+bool TList<T>::IsEnd()
 {
-	pPrevious = pStop;
-	if (!IsEmpty()) pCurrent = pFirst;
-	else pCurrent = pStop;
+	return pCurrent == pStop;
 }
-
 
 
 

@@ -41,15 +41,17 @@ void TList_Test()
 
 }
 
-void TPolinon_Test()
+void TPolinom_Test()
 {
 	TPolinom p1;
+	p1.AddMonom(TMonom(1, 1, 2, 3));
 	p1.AddMonom(TMonom(1, 1, 1, 1));
 	cout << "P1 = " + p1.ToString() + '\n';
 
 
 	TPolinom p2;
-	p2.AddMonom(TMonom(2, 2, 2, 2));
+	p1.AddMonom(TMonom(1, 1, 2, 3));
+	p2.AddMonom(TMonom(-1, 1, 1, 1));
 	cout << "P2 = " << p2.ToString() << '\n';
 	TPolinom result;
 	result = p1 + p2;
@@ -63,7 +65,7 @@ int main()
 	setlocale(LC_ALL, "ru");
 
 
-	TPolinon_Test();
+	TPolinom_Test();
 	
 
 }
