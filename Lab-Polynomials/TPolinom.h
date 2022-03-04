@@ -21,7 +21,7 @@ TPolinom::TPolinom() :THeadList<TMonom>::THeadList()
 {
 	TMonom m;
 
-	m.coef = 0;
+	m.coef = 1;
 
 	m.degX = m.degY = 0, m.degZ = -1;
 	pHead->value = m;
@@ -79,11 +79,27 @@ void TPolinom::AddMonom(TMonom m)
 TPolinom TPolinom::operator+(TPolinom& other)
 {
 	TPolinom result(other);
-
-	for (Reset(); !IsEnd(); GoNext())
+	Reset(); result.Reset();
+	while (!IsEnd())
 	{
-		TMonom m = GetCurrentItem();
-		result.AddMonom(m);
+		if (result.pCurrent->value > pCurrent->value)
+			result.GoNext();
+		else if (result.pCurrent->value < pCurrent->value)
+		{
+			result.InsertCurrent(pCurrent->value);
+			GoNext();
+		}
+		else result.pCurrent->value.coef += pCurrent->value.coef;
+		if (result.pCurrent->value.coef == 0)
+		{
+			result.DeleteCurrent();
+			GoNext();
+		}
+		else
+		{
+			result.GoNext();
+			GoNext();
+		}
 	}
 	return result;
 }

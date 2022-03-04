@@ -50,12 +50,10 @@ void TPolinom_Test()
 
 
 	TPolinom p2;
-	p1.AddMonom(TMonom(1, 1, 2, 3));
+	p2.AddMonom(TMonom(1, 1, 2, 3));
 	p2.AddMonom(TMonom(-1, 1, 1, 1));
 	cout << "P2 = " << p2.ToString() << '\n';
-	TPolinom result;
-	result = p1 + p2;
-	cout << "P1 + P2 = " << result.ToString();
+	cout << "P1 + P2 = " << (p1 + p2).ToString();
 }
 
 
