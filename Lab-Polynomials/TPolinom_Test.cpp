@@ -38,6 +38,7 @@ void TList_Test()
 	cout << "\nСписок: ";
 	for (list.Reset(); !list.IsEnd(); list.GoNext())
 		cout << list.GetCurrentItem() << " ";
+	
 
 }
 
@@ -54,6 +55,14 @@ void TPolinom_Test()
 	p2.AddMonom(TMonom(-1, 1, 1, 1));
 	cout << "P2 = " << p2.ToString() << '\n';
 	cout << "P1 + P2 = " << (p1 + p2).ToString();
+
+	cout << "\nP2 * 2 = " << (p2*2).ToString() << '\n';
+	cout << "P2 * 2x^2y^2z^2 = " << (p2.MultMonom(TMonom(2, 2, 2, 2))).ToString() << '\n';
+	cout << "P1 * P2 = " << (p1 * p2).ToString() << '\n';
+
+	cout << "\nПроверка ввода полиномов через строку:\n";
+	TPolinom p3("1,2x^2y^3z^2 + 1,5y^2z^3 + 1,5y^2z^3 + 0,34x^2 + 130,3242z^1");
+	cout << p3.ToString();
 }
 
 

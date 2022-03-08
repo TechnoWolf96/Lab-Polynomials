@@ -40,6 +40,9 @@ struct TMonom
 		else if (degX == other.degX && degY == other.degY && degZ < other.degZ) return true;
 		return false;
 	}
-
+	bool EqualCoef(const TMonom& other)
+	{
+		return degX == other.degX && degY == other.degY && degZ == other.degZ && coef == other.coef;
+	}
 
 };

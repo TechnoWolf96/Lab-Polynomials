@@ -108,7 +108,7 @@ template <class T>
 void TList<T>::DeleteFirst()
 {
 	if (pFirst == pStop)
-		throw "Can't delete first element: it's a barrier";
+		throw "Can't delete element from empty list";
 
 	TNode<T>* tmp = pFirst;
 	pFirst = pFirst->pNext;
@@ -120,7 +120,7 @@ template <class T>
 void TList<T>::DeleteCurrent()
 {
 	if (pCurrent == pStop)
-		throw "Can't delete current element: it's a barrier";
+		throw "Can't delete element from empty list";
 
 	if (pFirst == pCurrent)
 	{
@@ -140,7 +140,7 @@ template <class T>
 T TList<T>::GetCurrentItem()
 {
 	if (pCurrent == pStop)
-		throw "Can't get current element: it's a barrier";
+		throw "List is end";
 	return pCurrent->value;
 }
 
