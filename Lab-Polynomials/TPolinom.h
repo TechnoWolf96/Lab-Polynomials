@@ -211,7 +211,7 @@ inline TPolinom TPolinom::operator*(TPolinom& other)
 {
 	TPolinom result;
 	for (other.Reset(); !other.IsEnd(); other.GoNext())
-		result = result.AddPolinom(MultMonom(other.GetCurrentItem()));
+		result = result + MultMonom(other.GetCurrentItem());
 	return result;
 }
 

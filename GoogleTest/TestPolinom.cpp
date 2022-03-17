@@ -114,7 +114,7 @@ TEST(Polinom, Correct_polinom_enter) {
 	EXPECT_TRUE(p == ans);
 }
 
-TEST(Polinom, Correct_multiply_polinom) {
+TEST(Polinom, Correct_multiply_polinom1) {
 	bool result = true;
 	TPolinom p1 = "1x^1y^2z^3 + -2x^3y^2z^1";
 	TPolinom p2 = "1x^1z^1 + 2y^1";
@@ -125,4 +125,34 @@ TEST(Polinom, Correct_multiply_polinom) {
 	ans.AddMonom(TMonom(-4, 3, 3, 1));
 
 	EXPECT_TRUE(p1*p2 == ans);
+}
+
+TEST(Polinom, Correct_multiply_polinom2) {
+	bool result = true;
+	TPolinom p1 = "3x^2y^3z^2 + 4y^1z^2";
+	TPolinom p2 = "5z^1 + -1x^3y^2";
+	TPolinom ans;
+	ans.AddMonom(TMonom(15, 2, 3, 3));
+	ans.AddMonom(TMonom(-3, 5, 5, 2));
+	ans.AddMonom(TMonom(20, 0, 1, 3));
+	ans.AddMonom(TMonom(-4, 3, 3, 2));
+
+	EXPECT_TRUE(p1 * p2 == ans);
+}
+
+TEST(Polinom, Correct_multiply_polinom3) {
+	bool result = true;
+	TPolinom p1 = "2x^1-3y^1+4z^1";
+	TPolinom p2 = "2x^1y^1 - 1y^1z^1 + 1x^1z^2";
+	TPolinom ans;
+	ans.AddMonom(TMonom(4, 2, 1, 0));
+	ans.AddMonom(TMonom(2, 2, 0, 2));
+	ans.AddMonom(TMonom(-6, 1, 2, 0));
+	ans.AddMonom(TMonom(-3, 1, 1, 2));
+	ans.AddMonom(TMonom(6, 1, 1, 1));
+	ans.AddMonom(TMonom(4, 1, 0, 3));
+	ans.AddMonom(TMonom(3, 0, 2, 1));
+	ans.AddMonom(TMonom(-4, 0, 1, 2));
+
+	EXPECT_TRUE(p1 * p2 == ans);
 }

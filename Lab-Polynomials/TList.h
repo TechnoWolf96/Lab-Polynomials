@@ -89,9 +89,17 @@ template <class T>
 void TList<T>::InsertCurrent(T item)
 {
 	if (pCurrent == pFirst)
+	{
 		InsertFirst(item);
+		pPrevious = pFirst;
+	}
+		
 	else if (pPrevious == pLast)
+	{
 		InsertLast(item);
+		pPrevious = pLast;
+	}
+		
 	else
 	{
 		TNode<T>* newNode = new TNode<T>();
@@ -125,6 +133,8 @@ void TList<T>::DeleteCurrent()
 	if (pFirst == pCurrent)
 	{
 		DeleteFirst();
+		pPrevious = pStop;	// After delete first element pPrevious was null
+		pCurrent = pFirst;
 	}
 	else
 	{
